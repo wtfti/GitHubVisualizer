@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { title } from '../../environments/server';
 
 @Component({
 	selector: 'app-content',
@@ -6,8 +9,15 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
-	constructor() { }
+	title = title;
+	user = 'john.doe@vmware.com';
+
+	constructor(private router: Router) { }
 
 	ngOnInit() {
+	}
+
+	back(): void {
+		this.router.navigateByUrl('/');
 	}
 }
