@@ -1,21 +1,13 @@
 import { NgModule } from '@angular/core';
 
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClarityModule } from '@clr/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from '../core';
+import { SharedModule } from '../core/shared';
 import { LoginComponent } from './login.component';
+import { LoginRoutingModule } from './login-routing.module';
 
 @NgModule({
 	declarations: [LoginComponent],
-	imports: [
-		HttpClientModule,
-		ClarityModule,
-		FormsModule,
-		ReactiveFormsModule,
-		BrowserAnimationsModule
-	],
+	imports: [LoginRoutingModule, SharedModule],
 	providers: [AuthService]
 })
 export class LoginModule { }

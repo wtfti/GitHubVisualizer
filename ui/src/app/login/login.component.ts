@@ -4,6 +4,7 @@ import { ClrLoadingState } from '@clr/angular';
 
 import { Router } from '@angular/router';
 import { AuthService } from '../core';
+import { title } from '../../environments/server';
 
 @Component({
 	selector: 'app-login',
@@ -11,7 +12,7 @@ import { AuthService } from '../core';
 	styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-	title = 'GitHub Visualizer';
+	title = title;
 	loginForm: FormGroup;
 	showAlert: boolean;
 	error: string;
