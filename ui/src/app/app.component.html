@@ -17,12 +17,8 @@
 			<clr-password-container>
 				<input type="password" name="password" clrPassword placeholder="Password" formControlName="password" />
 			</clr-password-container>
-			<div class="error active" hidden>
-				Invalid user name or password
-			</div>
 			<button [clrLoading]="submitBtnState" type="submit" [disabled]="!loginForm.valid" class="btn btn-primary">LOGIN</button>
 		</div>
-
 	</form>
 </div>
 
