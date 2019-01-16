@@ -1,13 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core';
+
 import { AppComponent } from './app.component';
-import { ClarityModule } from '@clr/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthService } from './core';
+import { LoginComponent } from './login/login.component';
+import { SharedModule } from './core/shared';
 
 @NgModule({
 	declarations: [
@@ -15,14 +13,11 @@ import { AuthService } from './core';
 	],
 	imports: [
 		BrowserModule,
-		AppRoutingModule,
-		HttpClientModule,
-		ClarityModule,
-		FormsModule,
-		ReactiveFormsModule,
-		BrowserAnimationsModule
+		CoreModule,
+		SharedModule,
+		AppRoutingModule
 	],
-	providers: [AuthService],
+	providers: [],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }
