@@ -4,14 +4,14 @@
 	"description": "Node.js application to interact with GitHub’s API and visualize certain repos from a GitHub organization",
 	"main": "dist/index.js",
 	"scripts": {
-        "build": "tsc --p tsconfig.json",
-        "lint": "tslint -c tslint.json 'src/**/*.ts'",
-        "prebuild": "npm run lint",
-        "prestart": "npm run build && npm run uibuild",
-        "start": "node .",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "uibuild": "cd ui && npm run build"
-    },
+		"build": "tsc --p tsconfig.json",
+		"lint": "tslint -c tslint.json 'src/**/*.ts'",
+		"prebuild": "npm run lint",
+		"prestart": "npm run build && npm run uibuild",
+		"start": "node .",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"uibuild": "cd ui && npm run build"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/wtfti/GitHubVisualizer.git"
@@ -23,6 +23,7 @@
 	},
 	"homepage": "https://github.com/wtfti/GitHubVisualizer#readme",
 	"dependencies": {
+		"@types/request": "^2.48.1",
 		"express": "^4.16.4"
 	},
 	"devDependencies": {

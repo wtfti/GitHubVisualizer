@@ -1,6 +1,10 @@
 // equivalent of older: const express = require('express')
 import express from 'express';
 import path from 'path';
+import request from 'request';
+const gitHubClientId = '3923faf39e1967fabd43';
+const gitHubCclientSecret = '32b412226f77bce238569f5169d60edf08d75535';
+const githubOathUrl = 'https://github.com/login/oauth/access_token';
 const app = express();
 
 // Allow any method from any host and log requests
@@ -11,7 +15,6 @@ app.use((req, res, next) => {
 	if ('OPTIONS' === req.method) {
 		res.sendStatus(200);
 	} else {
-		console.log(`${req.ip} ${req.method} ${req.url}`);
 		next();
 	}
 });
@@ -21,7 +24,18 @@ app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, 'ui')));
 
+app.get('/auth', (req, res) => {
+	request.post({
+		url: `${githubOathUrl}?client_id=${gitHubClientId}&client_secret=${gitHubCclientSecret}&code=${req.query.code}`,
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}, (error, response, body) => {
+		res.redirect(`/?${body}`);
+	});
+});
+
 // start our server on port 4201
-app.listen(4201, '127.0.0.1', function() {
-	console.log('Server now listening on 4201');
+app.listen(4201, 'localhost', function () {
+	global.console.log('Server now listening on 4201');
 });

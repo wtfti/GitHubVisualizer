@@ -1,5 +1,5 @@
 <div class="login-wrapper">
-	<form [formGroup]="loginForm" class="login" (ngSubmit)="onSubmit()">
+	<form  class="login">
 		<section class="title">
 			{{ title }}
 		</section>
@@ -11,13 +11,7 @@
 			</clr-alert-item>
 		</clr-alert>
 		<div class="login-group">
-			<clr-input-container>
-				<input type="text" name="username" clrInput placeholder="Username" formControlName="username" />
-			</clr-input-container>
-			<clr-password-container>
-				<input type="password" name="password" clrPassword placeholder="Password" formControlName="password" />
-			</clr-password-container>
-			<button [clrLoading]="submitBtnState" type="submit" [disabled]="!loginForm.valid" class="btn btn-primary">LOGIN</button>
+			<a href="{{url}}">Login with GitHub</a>
 		</div>
 	</form>
 </div>

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ClrLoadingState } from '@clr/angular';
 
-import { Router } from '@angular/router';
 import { AuthService } from '../core';
 import { title } from '../../environments/server';
+import { gitHubAPIs } from '../../environments/server';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'app-login',
@@ -13,40 +12,30 @@ import { title } from '../../environments/server';
 })
 export class LoginComponent implements OnInit {
 	title = title;
-	loginForm: FormGroup;
 	showAlert: boolean;
 	error: string;
-	submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
+	url = gitHubAPIs.authorize;
 
 	constructor(
+		private activatedRoute: ActivatedRoute,
 		private router: Router,
-		private fb: FormBuilder,
-		private authService: AuthService
-	) {
-		this.loginForm = this.fb.group({
-			'username': ['test', Validators.required],
-			'password': ['123', Validators.required]
-		});
-	}
+		private authService: AuthService,
+	) {}
 
 	ngOnInit() {
-	}
-
-	onSubmit(): void {
-		this.submitBtnState = ClrLoadingState.LOADING;
-		this.authService.login(this.loginForm.get('username').value, this.loginForm.get('password').value)
+		this.activatedRoute.queryParams
 		.subscribe(
 			data => {
-				this.submitBtnState = ClrLoadingState.DEFAULT;
-				this.error = '';
-				this.showAlert = false;
+				if (!data.access_token && !this.authService.getToken()) {
+					return;
+				}
+
+				if (data.access_token) {
+					this.authService.saveToken(data.access_token);
+				}
+
 				this.router.navigateByUrl('/content');
-			},
-			err => {
-				this.submitBtnState = ClrLoadingState.DEFAULT;
-				this.error = err.message;
-				this.showAlert = !this.showAlert;
-			}
-		);
+			});
 	}
 }
+

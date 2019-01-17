@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './login/login.module';
 import { SharedModule } from './core/shared';
 
+
 @NgModule({
 	declarations: [
 		AppComponent
@@ -24,4 +25,5 @@ import { SharedModule } from './core/shared';
 	providers: [],
 	bootstrap: [AppComponent]
 })
-export class AppModule { }
+
+export class AppModule {}
