@@ -51,11 +51,11 @@
 
 			<clr-dg-row *clrDgItems="let repository of repositories" [clrDgItem]="repository">
 				<clr-dg-cell>{{repository.name}}</clr-dg-cell>
-				<clr-dg-cell>{{repository.licenseInfo.name}}</clr-dg-cell>
+				<clr-dg-cell>{{repository.license}}</clr-dg-cell>
 				<clr-dg-cell>{{repository.commits}}</clr-dg-cell>
-				<clr-dg-cell>{{repository.contributors}}</clr-dg-cell>
-				<clr-dg-cell>{{repository.releases.totalCount}}</clr-dg-cell>
-				<clr-dg-cell>{{repository.branches}}</clr-dg-cell>
+				<clr-dg-cell>{{repository.collaborators}}</clr-dg-cell>
+				<clr-dg-cell>{{repository.releases}}</clr-dg-cell>
+				<clr-dg-cell>{{repository.branches.length}}</clr-dg-cell>
 			</clr-dg-row>
 
 			<clr-dg-footer>

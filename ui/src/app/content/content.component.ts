@@ -22,16 +22,7 @@ export class ContentComponent implements OnInit {
 		this.gitHubService.getPinnedRepositories('webpack', this.authService.getToken())
 			.subscribe(
 				resp => {
-					this.repositories = resp.data.repositoryOwner.pinnedRepositories.edges.map(x => x.node);
-					const repos = this.repositories.map(x => x.name);
-
-					const obs = repos
-						.map(repository => this.gitHubService.getTotalCommits('webpack', repository, this.authService.getToken()));
-
-					obs.forEach(o => o.subscribe(d => {
-						const rep = this.repositories.find(c => c.name === d.data.repository.name);
-						rep.commits = d.data.repository.defaultBranchRef.target.history.totalCount;
-					}));
+					this.repositories = resp;
 				}
 			);
 	}
