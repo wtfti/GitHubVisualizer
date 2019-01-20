@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { title } from '../../environments/server';
 import { GitHubService, AuthService } from '../core';
@@ -9,9 +10,10 @@ import { GitHubService, AuthService } from '../core';
 	templateUrl: './content.component.html',
 	styleUrls: ['./content.component.css']
 })
-export class ContentComponent implements OnInit {
+export class ContentComponent implements OnInit, OnDestroy {
 	title = title;
 	repositories = [];
+	repositoryObservable: Subscription;
 
 	constructor(
 		private router: Router,
@@ -19,12 +21,16 @@ export class ContentComponent implements OnInit {
 		private authService: AuthService) { }
 
 	ngOnInit() {
-		this.gitHubService.getPinnedRepositories('webpack', this.authService.getToken())
-			.subscribe(
-				resp => {
-					this.repositories = resp;
-				}
-			);
+		this.repositoryObservable = this.gitHubService.getPinnedRepositories('webpack', this.authService.getToken())
+		.subscribe(
+			resp => {
+				this.repositories = resp;
+			}
+		);
+	}
+
+	ngOnDestroy() {
+		this.repositoryObservable.unsubscribe();
 	}
 
 	logout(): void {

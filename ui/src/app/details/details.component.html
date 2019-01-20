@@ -1,0 +1,28 @@
+<header class="header-6">
+	<div class="branding">
+		<a href="..." class="nav-link">
+			<clr-icon shape="vm-bug"></clr-icon>
+			<span class="title">{{title}}</span>
+		</a>
+	</div>
+	<div class="header-actions">
+		<clr-dropdown>
+			<button class="nav-text" clrDropdownTrigger (click)="logout()">
+				Log out
+			</button>
+		</clr-dropdown>
+	</div>
+</header>
+<div class="content-container">
+	Organization / Repository: Webpack / {{repositoryName}}
+	<div class="content-area">
+		<div class="clr-row">
+			<div class="clr-col-6">
+				<textarea placeholder="Describe something" class="clr-textarea"></textarea>
+			</div>
+			<div class="clr-col-6">
+				<textarea placeholder="Describe something" class="clr-textarea"></textarea>
+			</div>
+		</div>
+	</div>
+</div>

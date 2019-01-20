@@ -50,7 +50,7 @@
 			...
 
 			<clr-dg-row *clrDgItems="let repository of repositories" [clrDgItem]="repository">
-				<clr-dg-cell>{{repository.name}}</clr-dg-cell>
+				<clr-dg-cell><a [routerLink]="['/details']" [queryParams]="{repositoryName: repository.name}" >{{repository.name}}</a></clr-dg-cell>
 				<clr-dg-cell>{{repository.license}}</clr-dg-cell>
 				<clr-dg-cell>{{repository.commits}}</clr-dg-cell>
 				<clr-dg-cell>{{repository.collaborators}}</clr-dg-cell>
