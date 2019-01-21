@@ -1,6 +1,6 @@
 <header class="header-6">
 	<div class="branding">
-		<a href="..." class="nav-link">
+		<a [routerLink]="['/content']" class="nav-link">
 			<clr-icon shape="vm-bug"></clr-icon>
 			<span class="title">{{title}}</span>
 		</a>
@@ -13,16 +13,60 @@
 		</clr-dropdown>
 	</div>
 </header>
-<div class="content-container">
-	Organization / Repository: Webpack / {{repositoryName}}
-	<div class="content-area">
-		<div class="clr-row">
-			<div class="clr-col-6">
-				<textarea placeholder="Describe something" class="clr-textarea"></textarea>
-			</div>
-			<div class="clr-col-6">
-				<textarea placeholder="Describe something" class="clr-textarea"></textarea>
-			</div>
-		</div>
-	</div>
+<div class="container">
+	Organization / Repository: {{organizationName}} / {{repositoryName}} <button class="btn btn-sm" style="margin-left: 1.5em"
+	 (click)="home()">Back
+		to pinned repositories</button>
+	<clr-tabs>
+		<clr-tab>
+			<button clrTabLink>Details</button>
+			<ng-template [(clrIfActive)]="dashboardActive">
+				<clr-tab-content>
+					<div class="content-container">
+						<div class="content-area">
+							<div class="clr-row">
+								<div class="clr-col-6">README.md</div>
+								<div class="clr-col-6">package.json</div>
+							</div>
+							<div class="clr-row">
+								<div class="clr-col-6" [innerHtml]="readme"></div>
+								<div class="clr-col-6">
+									<ngx-json-viewer [json]="packageJson"></ngx-json-viewer>
+								</div>
+							</div>
+						</div>
+					</div>
+				</clr-tab-content>
+			</ng-template>
+		</clr-tab>
+
+		<clr-tab>
+			<button clrTabLink>Commits</button>
+			<ng-template [(clrIfActive)]="managementActive">
+				<clr-tab-content>
+					<div class="content-container">
+						<div class="content-area">
+							<clr-datagrid>
+								<clr-dg-column>Comment</clr-dg-column>
+								<clr-dg-column>Date</clr-dg-column>
+								<clr-dg-column>Contributor</clr-dg-column>
+								<clr-dg-column>Download patch</clr-dg-column>
+
+								<clr-dg-row *ngFor="let commit of commits">
+									<clr-dg-cell>{{commit.comment}}</clr-dg-cell>
+									<clr-dg-cell>{{commit.date}}</clr-dg-cell>
+									<clr-dg-cell>{{commit.name}}</clr-dg-cell>
+									<clr-dg-cell>
+										<a target="_blank" href="https://github.com/{{organizationName}}/{{repositoryName}}/archive/{{commit.sha}}.zip">Download</a>
+									</clr-dg-cell>
+								</clr-dg-row>
+
+								<clr-dg-footer>{{commits.length}} Commits</clr-dg-footer>
+							</clr-datagrid>
+						</div>
+					</div>
+				</clr-tab-content>
+			</ng-template>
+		</clr-tab>
+	</clr-tabs>
 </div>

@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
-import { title } from '../../environments/server';
+import { organization } from '../../environments/server';
 import { GitHubService, AuthService } from '../core';
 
 @Component({
@@ -11,22 +11,22 @@ import { GitHubService, AuthService } from '../core';
 	styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit, OnDestroy {
-	title = title;
 	repositories = [];
 	repositoryObservable: Subscription;
+	organization = organization;
 
 	constructor(
-		private router: Router,
 		private gitHubService: GitHubService,
+		private router: Router,
 		private authService: AuthService) { }
 
 	ngOnInit() {
-		this.repositoryObservable = this.gitHubService.getPinnedRepositories('webpack', this.authService.getToken())
-		.subscribe(
-			resp => {
-				this.repositories = resp;
-			}
-		);
+		this.repositoryObservable = this.gitHubService.getPinnedRepositories(organization, this.authService.getToken())
+			.subscribe(
+				resp => {
+					this.repositories = resp;
+				}
+			);
 	}
 
 	ngOnDestroy() {

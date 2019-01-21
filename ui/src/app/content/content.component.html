@@ -1,6 +1,6 @@
 <header class="header-6">
 	<div class="branding">
-		<a href="..." class="nav-link">
+		<a [routerLink]="['/content']" class="nav-link">
 			<clr-icon shape="vm-bug"></clr-icon>
 			<span class="title">{{title}}</span>
 		</a>
@@ -14,7 +14,7 @@
 	</div>
 </header>
 <div class="content-container">
-	Organization: Webpack
+	Organization: {{organization}}
 	<div class="content-area">
 		<clr-datagrid>
 			<clr-dg-column>
@@ -50,7 +50,7 @@
 			...
 
 			<clr-dg-row *clrDgItems="let repository of repositories" [clrDgItem]="repository">
-				<clr-dg-cell><a [routerLink]="['/details']" [queryParams]="{repositoryName: repository.name}" >{{repository.name}}</a></clr-dg-cell>
+				<clr-dg-cell><a [routerLink]="['/details']" [queryParams]="{ repositoryName: repository.name, organization: organization }">{{repository.name}}</a></clr-dg-cell>
 				<clr-dg-cell>{{repository.license}}</clr-dg-cell>
 				<clr-dg-cell>{{repository.commits}}</clr-dg-cell>
 				<clr-dg-cell>{{repository.collaborators}}</clr-dg-cell>
