@@ -37,8 +37,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
 					.getRepositoryDetails(query.get('organization'), this.repositoryName, this.authService.getToken())
 					.subscribe(
 						repositoryInfo => {
-							this.readme = repositoryInfo.readme,
-								this.packageJson = JSON.parse(repositoryInfo['package.json']);
+							this.readme = repositoryInfo.readme;
+							this.packageJson = JSON.parse(repositoryInfo['package.json']);
 						}
 					);
 				this.commitsSubscription = this.gitHubService

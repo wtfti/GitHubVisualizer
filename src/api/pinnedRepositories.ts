@@ -21,7 +21,6 @@ export = (app: Express) => {
 				return {
 					name: item.node.name,
 					license: item.node.licenseInfo.name,
-					collaborators: item.node.mentionableUsers.totalCount,
 					releases: item.node.releases.totalCount,
 					commits: item.node.defaultBranchRef.target.history.totalCount
 				};
@@ -33,13 +32,19 @@ export = (app: Express) => {
 					headers: getHeaders(token)
 				})).body);
 
+				const contributorsResponse = await request.getAsync({
+					uri: `${rest}/repos/${organization}/${item.name}/contributors?per_page=1`,
+					headers: getHeaders(token)
+				});
+
+				item.contributors = contributorsResponse.headers.link.match(/page=([0-9]+)>; rel="last"/)[1];
 				item.branches = branches;
 
 				return item;
 			}));
 
 			res.send(result);
-		} catch {
+		} catch (e) {
 			return res.send({
 				error: 'Cannot get pinned repositories'
 			});
@@ -56,13 +61,10 @@ function pinnedRepositoriesQuery(organization: String) {
 			pinnedRepositories(first: ${repositoryAmount}) {
 			  edges {
 				node {
-				  name
+				  name,
 				  licenseInfo {
 					name
-				  }
-				  mentionableUsers {
-					totalCount
-				  }
+				  },
 				  releases {
 					totalCount
 				  },
