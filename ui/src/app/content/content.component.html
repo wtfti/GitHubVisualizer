@@ -47,7 +47,6 @@
 					Branches
 				</ng-container>
 			</clr-dg-column>
-			...
 
 			<clr-dg-row *clrDgItems="let repository of repositories" [clrDgItem]="repository">
 				<clr-dg-cell><a [routerLink]="['/details']" [queryParams]="{ repositoryName: repository.name, organization: organization }">{{repository.name}}</a></clr-dg-cell>
@@ -59,10 +58,9 @@
 			</clr-dg-row>
 
 			<clr-dg-footer>
-				<!-- Optional customization of hide/show columns toggle -->
 				<clr-dg-column-toggle>
-					<clr-dg-column-toggle-title>Kolumne Herauschauen!</clr-dg-column-toggle-title>
-					<clr-dg-column-toggle-button>Alle auswählen!</clr-dg-column-toggle-button>
+					<clr-dg-column-toggle-title>Select columns</clr-dg-column-toggle-title>
+					<clr-dg-column-toggle-button>Select all</clr-dg-column-toggle-button>
 				</clr-dg-column-toggle>
 				{{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
 				of {{pagination.totalItems}} Pinned repositories
