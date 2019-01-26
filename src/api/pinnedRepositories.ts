@@ -49,13 +49,12 @@ export = (app: Express) => {
 };
 
 function pinnedRepositoriesQuery(organization: String) {
-	const repositoryAmount = 20;
-	const mentionableUsers = 10;
+	const repositoryAmount = 30;
 
 	return `{
 		repositoryOwner(login: "${organization}") {
 		  ... on Organization {
-			pinnedRepositories(first: 10) {
+			pinnedRepositories(first: ${repositoryAmount}) {
 			  edges {
 				node {
 				  name
