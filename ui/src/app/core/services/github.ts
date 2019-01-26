@@ -15,7 +15,7 @@ export class GitHubService {
 			token: token
 		};
 
-		return this.http.post(`${server}/pinnedRepositories`, query, {
+		return this.http.post(`/pinnedRepositories`, query, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json'
 			})
@@ -23,7 +23,7 @@ export class GitHubService {
 	}
 
 	getRepositoryDetails(organization: String, repository: String, token: String): Observable<any> {
-		return this.http.get(`${server}/repositoryDetails?organization=${organization}&repository=${repository}&token=${token}`, {
+		return this.http.get(`/repositoryDetails?organization=${organization}&repository=${repository}&token=${token}`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json'
 			})
@@ -31,7 +31,7 @@ export class GitHubService {
 	}
 
 	getCommits(organization: String, repository: String, token: String): Observable<any> {
-		return this.http.get(`${server}/commits?organization=${organization}&repository=${repository}&token=${token}`, {
+		return this.http.get(`/commits?organization=${organization}&repository=${repository}&token=${token}`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json'
 			})
