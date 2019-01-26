@@ -10,34 +10,40 @@ export = (app: Express) => {
 		const organization = req.body.organization;
 		const token = req.body.token;
 
-		const repositories = JSON.parse((await request.postAsync({
-			url: graphQl,
-			headers: getHeaders(token),
-			body: JSON.stringify({
-				query: pinnedRepositoriesQuery(organization)
-			})
-		})).body).data.repositoryOwner.pinnedRepositories.edges.map((item: any) => {
-			return {
-				name: item.node.name,
-				license: item.node.licenseInfo.name,
-				collaborators: item.node.mentionableUsers.totalCount,
-				releases: item.node.releases.totalCount,
-				commits: item.node.defaultBranchRef.target.history.totalCount
-			};
-		});
+		try {
+			const repositories = JSON.parse((await request.postAsync({
+				url: graphQl,
+				headers: getHeaders(token),
+				body: JSON.stringify({
+					query: pinnedRepositoriesQuery(organization)
+				})
+			})).body).data.repositoryOwner.pinnedRepositories.edges.map((item: any) => {
+				return {
+					name: item.node.name,
+					license: item.node.licenseInfo.name,
+					collaborators: item.node.mentionableUsers.totalCount,
+					releases: item.node.releases.totalCount,
+					commits: item.node.defaultBranchRef.target.history.totalCount
+				};
+			});
 
-		const result = await Promise.all(repositories.map(async (item: any) => {
-			const branches = JSON.parse((await request.getAsync({
-				uri: `${rest}/repos/${organization}/${item.name}/branches`,
-				headers: getHeaders(token)
-			})).body);
+			const result = await Promise.all(repositories.map(async (item: any) => {
+				const branches = JSON.parse((await request.getAsync({
+					uri: `${rest}/repos/${organization}/${item.name}/branches`,
+					headers: getHeaders(token)
+				})).body);
 
-			item.branches = branches;
+				item.branches = branches;
 
-			return item;
-		}));
+				return item;
+			}));
 
-		res.send(result);
+			res.send(result);
+		} catch {
+			return res.send({
+				error: 'Cannot get pinned repositories'
+			});
+		}
 	});
 };
 

@@ -1,7 +1,9 @@
-import request from 'request';
+import bluebird from 'bluebird';
+import _request from 'request';
 import { getHeaders } from './utils/helpers';
 import { rest } from './utils/constants';
 import { Express } from 'express';
+const request: any = bluebird.promisifyAll(_request);
 
 export = (app: Express) => {
 	app.get('/commits', async (req, res) => {
@@ -9,14 +11,13 @@ export = (app: Express) => {
 		const repository = req.query.repository;
 		const token = req.query.token;
 
-		request({
+		const response = JSON.parse((await request.getAsync({
 			url: `${rest}/repos/${organization}/${repository}/commits`,
 			headers: getHeaders(token)
-		}, (e, r, b) => {
-			const commits = JSON.parse(b);
-			res.send({
-				commits: commits
-			});
+		})).body);
+
+		res.send({
+			commits: response
 		});
 	});
 };
