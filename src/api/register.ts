@@ -25,8 +25,7 @@ export = (app: Express) => {
 		});
 
 		res.send({
-			success: true,
-			token: jwt.sign(username, secretKey)
+			success: true
 		});
 	});
 };

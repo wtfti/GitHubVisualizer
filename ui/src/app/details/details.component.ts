@@ -45,16 +45,25 @@ export class DetailsComponent implements OnInit, OnDestroy {
 				this.repositoryName = query.get('repositoryName');
 				this.organizationName = query.get('organization');
 
-				// this.repositoryDetailsSubscription = this.gitHubService
-				// 	.getRepositoryDetails(query.get('organization'), this.repositoryName, this.authService.getToken())
-				// 	.subscribe(
-				// 		repositoryInfo => {
-				// 			this.readme = repositoryInfo.readme;
-				// 			this.packageJson = JSON.parse(repositoryInfo['package.json']);
-				// 		}
-				// 	);
+				this.repositoryDetailsSubscription = this.gitHubService
+					.getRepositoryDetails(
+						query.get('organization'),
+						this.repositoryName,
+						this.authService.getToken(Tokens.Oath),
+						this.authService.getToken(Tokens.Jwt))
+					.subscribe(
+						repositoryInfo => {
+							this.readme = repositoryInfo.readme;
+							this.packageJson = JSON.parse(repositoryInfo['package.json']);
+						}
+					);
 				this.commitsSubscription = this.gitHubService
-					.getCommits(query.get('organization'), this.repositoryName, this.authService.getToken(), this.filter)
+					.getCommits(
+						query.get('organization'),
+						this.repositoryName,
+						this.authService.getToken(Tokens.Oath),
+						this.filter,
+						this.authService.getToken(Tokens.Jwt))
 					.subscribe(
 						data => {
 							this.commits = data.commits
@@ -92,7 +101,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
 	}
 
 	fetch() {
-		this.gitHubService.getCommits(this.organizationName, this.repositoryName, this.authService.getToken(), this.filter)
+		this.gitHubService.getCommits(
+			this.organizationName,
+			this.repositoryName,
+			this.authService.getToken(Tokens.Oath),
+			this.filter,
+			this.authService.getToken(Tokens.Jwt))
 			.subscribe(
 				data => {
 					this.commits = data.commits

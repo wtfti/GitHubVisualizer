@@ -12,9 +12,12 @@
 			</clr-password-container>
 			<clr-password-container [hidden]="!registerForm">
                 <input type="password" name="confirmPassword" clrPassword placeholder="Confirm password" [(ngModel)]="loginForm.confirmPassword"/>
-            </clr-password-container>
-			<button type="submit" class="btn btn-primary" (click)="login()" [hidden]="registerForm">Sign in</button>
-			<button type="submit" class="btn btn-primary" (click)="register()" [hidden]="!registerForm">Register</button>
+			</clr-password-container>
+			<div class="error active" [hidden]="!error">
+                {{error}}
+            </div>
+			<button class="btn btn-primary" (click)="login()" [hidden]="registerForm">Sign in</button>
+			<button class="btn btn-primary" (click)="register()" [hidden]="!registerForm">Register</button>
             <a class="signup" (click)="switchScreen()" [hidden]="registerForm">Sign up</a>
 		</div>
     </form>

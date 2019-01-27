@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { gitHubAPIs, server } from '../../../environments/server';
-const tokenName = 'token';
 
 @Injectable()
 export class AuthService {
@@ -33,15 +32,16 @@ export class AuthService {
 		return this.http.get(gitHubAPIs.authorize);
 	}
 
-	getToken(): String {
-		return window.localStorage[tokenName];
+	getToken(type: Tokens): String {
+		return window.localStorage[type];
 	}
 
-	saveToken(token: String) {
-		window.localStorage[tokenName] = token;
+	saveToken(tokenType: Tokens, token: String) {
+		window.localStorage[tokenType] = token;
 	}
 
 	destroyToken() {
-		window.localStorage.removeItem(tokenName);
+		window.localStorage.removeItem(Tokens.Jwt);
+		window.localStorage.removeItem(Tokens.Oath);
 	}
 }

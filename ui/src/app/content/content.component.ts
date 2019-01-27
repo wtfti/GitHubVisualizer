@@ -21,7 +21,10 @@ export class ContentComponent implements OnInit, OnDestroy {
 		private authService: AuthService) { }
 
 	ngOnInit() {
-		this.repositoryObservable = this.gitHubService.getPinnedRepositories(organization, this.authService.getToken())
+		this.repositoryObservable = this.gitHubService.getPinnedRepositories(
+			organization,
+			this.authService.getToken(Tokens.Oath),
+			this.authService.getToken(Tokens.Jwt))
 			.subscribe(
 				resp => {
 					this.repositories = resp;

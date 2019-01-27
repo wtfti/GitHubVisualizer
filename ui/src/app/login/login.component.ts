@@ -4,7 +4,7 @@ import { AuthService } from '../core';
 import { title } from '../../environments/server';
 import { gitHubAPIs } from '../../environments/server';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
 	selector: 'app-login',
@@ -14,10 +14,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class LoginComponent implements OnInit {
 	title = title;
 	showAlert: boolean;
-	error: string;
+	error = '';
 	loginForm: any;
 	registerForm: boolean;
-	url = gitHubAPIs.authorize;
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -26,8 +25,8 @@ export class LoginComponent implements OnInit {
 		private fb: FormBuilder
 	) {
 		this.loginForm = this.fb.group({
-			'username': ['', Validators.required],
-			'password': ['', Validators.required],
+			'username': [''],
+			'password': [''],
 			'confirmPassword': ['']
 		});
 	}
@@ -36,12 +35,12 @@ export class LoginComponent implements OnInit {
 		this.activatedRoute.queryParams
 			.subscribe(
 				data => {
-					if (!data.access_token && !this.authService.getToken()) {
+					if ((!data.access_token && !this.authService.getToken(Tokens.Oath)) || !this.authService.getToken(Tokens.Jwt)) {
 						return;
 					}
 
 					if (data.access_token) {
-						this.authService.saveToken(data.access_token);
+						this.authService.saveToken(Tokens.Oath, data.access_token);
 					}
 
 					this.router.navigateByUrl('/content');
@@ -49,20 +48,36 @@ export class LoginComponent implements OnInit {
 	}
 
 	async register() {
-		const result = await this.authService.register(this.loginForm.username,
-			this.loginForm.password, this.loginForm.confirmPassword);
+		try {
+			const result: any = await this.authService.register(this.loginForm.username,
+				this.loginForm.password, this.loginForm.confirmPassword);
 
-		if (result) {
+			if (result.error) {
+				return this.error = result.error.message;
+			}
+
 			this.switchScreen();
+		} catch (e) {
+			this.error = e.error.message;
 		}
 	}
 
 	async login() {
-		const result = await this.authService.login(this.loginForm.username,
-			this.loginForm.password);
+		try {
+			const result: any = await this.authService.login(this.loginForm.username,
+				this.loginForm.password);
+
+			if (result.jwtToken) {
+				this.authService.saveToken(Tokens.Jwt, result.jwtToken);
+				window.location.href = gitHubAPIs.authorize;
+			}
+		} catch (e) {
+			this.error = e.error.message;
+		}
 	}
 
 	switchScreen() {
+		this.error = '';
 		this.loginForm.username = '';
 		this.loginForm.password = '';
 		this.loginForm.confirmPassword = '';

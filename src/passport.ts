@@ -49,14 +49,14 @@ function checkCredentials(u: User) {
 	});
 }
 
-function findUser(username: String) {
+function findUser(user: User) {
 	return new Promise((resolve, reject) => {
-		const user = UsersStore.get(username);
+		const storedUser = UsersStore.get(user.username);
 
-		if (!user) {
+		if (!storedUser) {
 			return reject(undefined);
 		}
 
-		return resolve(user);
+		return resolve(storedUser);
 	});
 }

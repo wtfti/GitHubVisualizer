@@ -20,7 +20,9 @@ export = (app: Express) => {
 
 				// generate a signed son web token with the contents of user object and return it in the response
 				const token = jwt.sign(user, secretKey);
-				return res.json({ user, token });
+				return res.send({
+					jwtToken: token
+				});
 			});
 		})(req, res);
 	});
