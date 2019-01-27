@@ -1,17 +1,21 @@
 <div class="login-wrapper">
-	<form  class="login">
-		<section class="title">
-			{{ title }}
-		</section>
-		<clr-alert [clrAlertType]="'danger'" [clrAlertAppLevel]="true" *ngIf="showAlert">
-			<clr-alert-item>
-				<span class="alert-text">
-					{{error}}
-				</span>
-			</clr-alert-item>
-		</clr-alert>
-		<div class="login-group">
-			<a href="{{url}}">Login with GitHub</a>
+    <form class="login">
+        <section class="title">
+            {{ title }}
+        </section>
+        <div class="login-group">
+            <clr-input-container>
+                <input type="text" name="username" clrInput placeholder="Username" [(ngModel)]="loginForm.username"/>
+            </clr-input-container>
+            <clr-password-container>
+                <input type="password" name="password" clrPassword placeholder="Password" [(ngModel)]="loginForm.password"/>
+			</clr-password-container>
+			<clr-password-container [hidden]="!registerForm">
+                <input type="password" name="confirmPassword" clrPassword placeholder="Confirm password" [(ngModel)]="loginForm.confirmPassword"/>
+            </clr-password-container>
+			<button type="submit" class="btn btn-primary" (click)="login()" [hidden]="registerForm">Sign in</button>
+			<button type="submit" class="btn btn-primary" (click)="register()" [hidden]="!registerForm">Register</button>
+            <a class="signup" (click)="switchScreen()" [hidden]="registerForm">Sign up</a>
 		</div>
-	</form>
+    </form>
 </div>
