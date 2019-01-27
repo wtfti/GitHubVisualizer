@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { server } from '../../../environments/server';
 
 @Injectable()
 export class GitHubService {
@@ -30,8 +29,10 @@ export class GitHubService {
 		});
 	}
 
-	getCommits(organization: String, repository: String, token: String): Observable<any> {
-		return this.http.get(`/commits?organization=${organization}&repository=${repository}&token=${token}`, {
+	getCommits(organization: String, repository: String, token: String, filter: Filter): Observable<any> {
+		const { fromDate, toDate, pagination } = filter;
+
+		return this.http.get(`/commits?organization=${organization}&repository=${repository}&token=${token}&fromDate=${fromDate}&toDate=${toDate}&page=${pagination.currentPage}`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json'
 			})

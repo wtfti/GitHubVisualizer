@@ -43,10 +43,17 @@
 		<clr-tab>
 			<button clrTabLink>Commits</button>
 			<ng-template [(clrIfActive)]="managementActive">
+				<div class="form-group">
+					<label for="fromDate">Since</label>
+					<input type="fromDate" id="fromDate" name="fromDate" [(ngModel)]="filter.fromDate" readonly clrDate
+					 (ngModelChange)="fetch()">
+					<label for="toDate">Until</label>
+					<input type="toDate" id="toDate" name="toDate" [(ngModel)]="filter.toDate" readonly clrDate (ngModelChange)="fetch($event)">
+				</div>
 				<clr-tab-content>
 					<div class="content-container">
 						<div class="content-area">
-							<clr-datagrid>
+							<clr-datagrid style="overflow: hidden;">
 								<clr-dg-column>Comment</clr-dg-column>
 								<clr-dg-column>Date</clr-dg-column>
 								<clr-dg-column>Contributor</clr-dg-column>
@@ -61,7 +68,12 @@
 									</clr-dg-cell>
 								</clr-dg-row>
 
-								<clr-dg-footer>{{commits.length}} Commits</clr-dg-footer>
+								<clr-dg-footer>
+									{{filter.pagination.currentPage}} - {{filter.pagination.totalPages}}
+									of {{commits.length}} Commits
+									<button class="btn btn-sm" style="margin-left: 1em" [disabled]="filter.pagination.currentPage === 1" (click)="previousPage()"><</button>
+									<button class="btn btn-sm" style="margin-left: 1em" [disabled]="filter.pagination.currentPage === filter.pagination.totalPages" (click)="nextPage()">></button>
+								</clr-dg-footer>
 							</clr-datagrid>
 						</div>
 					</div>
