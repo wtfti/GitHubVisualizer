@@ -2,6 +2,8 @@
 import express from 'express';
 import path from 'path';
 import routes from './api';
+import passportConfig from './passport';
+
 const app = express();
 const port = 4201;
 const host = '0.0.0.0';
@@ -20,7 +22,7 @@ app.use((req, res, next) => {
 
 // Handle POST requests that come in formatted as JSON
 app.use(express.json());
-
+passportConfig();
 app.use('/', express.static(path.join(__dirname, 'ui')));
 app.use('/content', express.static(path.join(__dirname, 'ui')));
 app.use('/details', express.static(path.join(__dirname, 'ui')));

@@ -5,7 +5,7 @@ export class UsersStore {
 		_store.set(user.username, user);
 	}
 
-	static get(user: User) {
-		return _store.get(user.username);
+	static get(user: String): User {
+		return _store.get(user);
 	}
 }

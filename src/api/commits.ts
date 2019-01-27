@@ -5,8 +5,8 @@ import { rest } from './utils/constants';
 import { Express } from 'express';
 const request: any = bluebird.promisifyAll(_request);
 
-export = (app: Express) => {
-	app.get('/commits', async (req, res) => {
+export = (app: Express, protectedRoute: any) => {
+	app.get('/commits', protectedRoute, async (req, res) => {
 		const organization = req.query.organization;
 		const repository = req.query.repository;
 		const page = req.query.page || 1;

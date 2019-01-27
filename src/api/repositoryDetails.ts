@@ -5,8 +5,8 @@ import { getHeaders } from './utils/helpers';
 import { rest } from './utils/constants';
 const request: any = bluebird.promisifyAll(_request);
 
-export = (app: Express) => {
-	app.get('/repositoryDetails', async (req, res) => {
+export = (app: Express, protectedRoute: any) => {
+	app.get('/repositoryDetails', protectedRoute, async (req, res) => {
 		const organization = req.query.organization;
 		const repository = req.query.repository;
 		const token = req.query.token;

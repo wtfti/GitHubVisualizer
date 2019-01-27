@@ -5,8 +5,8 @@ import { rest, graphQl } from './utils/constants';
 import { Express } from 'express';
 const request: any = bluebird.promisifyAll(_request);
 
-export = (app: Express) => {
-	app.post('/pinnedRepositories', async (req: any, res: any) => {
+export = (app: Express, protectedRoute: any) => {
+	app.post('/pinnedRepositories', protectedRoute, async (req: any, res: any) => {
 		const organization = req.body.organization;
 		const token = req.body.token;
 
