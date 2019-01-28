@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { server } from '../../../environments/server';
 
 @Injectable()
 export class GitHubService {
+	private commitsSubject: Subject<any> = new Subject<any>();
+
 	constructor(
 		private http: HttpClient) {
 	}
@@ -37,11 +39,18 @@ export class GitHubService {
 		const queryFilters = `fromDate=${fromDate}&toDate=${toDate}&page=${pagination.currentPage}`;
 		const q = `organization=${organization}&repository=${repository}&token=${token}&${queryFilters}`;
 
-		return this.http.get(`${server}/commits?${q}`, {
+		this.http.get(`${server}/commits?${q}`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json',
 				'Authorization': 'bearer ' + authorizationToken
 			})
-		});
+		})
+		.subscribe(
+			data => {
+				this.commitsSubject.next(data);
+			}
+		);
+
+		return this.commitsSubject.asObservable();
 	}
 }
