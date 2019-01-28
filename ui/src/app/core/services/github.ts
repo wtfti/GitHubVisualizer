@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { server } from '../../../environments/server';
 
 @Injectable()
 export class GitHubService {
@@ -17,7 +16,7 @@ export class GitHubService {
 			token: token
 		};
 
-		return this.http.post(`${server}/pinnedRepositories`, query, {
+		return this.http.post(`/pinnedRepositories`, query, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json',
 				'Authorization': 'bearer ' + authorizationToken
@@ -26,7 +25,7 @@ export class GitHubService {
 	}
 
 	getRepositoryDetails(organization: String, repository: String, token: String, authorizationToken: String): Observable<any> {
-		return this.http.get(`${server}/repositoryDetails?organization=${organization}&repository=${repository}&token=${token}`, {
+		return this.http.get(`/repositoryDetails?organization=${organization}&repository=${repository}&token=${token}`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json',
 				'Authorization': 'bearer ' + authorizationToken
@@ -39,7 +38,7 @@ export class GitHubService {
 		const queryFilters = `fromDate=${fromDate}&toDate=${toDate}&page=${pagination.currentPage}`;
 		const q = `organization=${organization}&repository=${repository}&token=${token}&${queryFilters}`;
 
-		this.http.get(`${server}/commits?${q}`, {
+		this.http.get(`/commits?${q}`, {
 			headers: new HttpHeaders({
 				'Content-Type': 'application/json',
 				'Authorization': 'bearer ' + authorizationToken
@@ -52,5 +51,13 @@ export class GitHubService {
 		);
 
 		return this.commitsSubject.asObservable();
+	}
+
+	getPatch(organization: String, repository: String, sha: String, authorizationToken: String): Observable<any> {
+		return this.http.get(`/patch?organization=${organization}&repository=${repository}&sha=${sha}`, {
+			headers: new HttpHeaders({
+				'Authorization': 'bearer ' + authorizationToken
+			})
+		});
 	}
 }

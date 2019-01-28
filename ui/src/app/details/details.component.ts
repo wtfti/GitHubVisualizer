@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { title } from '../../environments/server';
 import { GitHubService, AuthService } from '../core';
 import { Subscription } from 'rxjs';
+import { saveAs } from 'file-saver';
 const dateOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
 const today = new Date();
 const fDate = new Date();
@@ -20,6 +21,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 	organizationName: String;
 	repositoryDetailsSubscription: Subscription;
 	commitsSubscription: Subscription;
+	patchSubscription: Subscription;
 	repositories = [];
 	readme: '';
 	filter: Filter = {
@@ -106,26 +108,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
 			this.repositoryName,
 			this.authService.getToken(Tokens.Oath),
 			this.filter,
-			this.authService.getToken(Tokens.Jwt))
-			.subscribe(
-				data => {
-					this.commits = data.commits
-						.map(c => {
-							const d = new Date(c.commit.author.date);
-							const date = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}, ${d.getUTCHours()}:${d.getUTCMinutes()}`;
+			this.authService.getToken(Tokens.Jwt));
+	}
 
-							return {
-								sha: c.sha,
-								comment: c.commit.message,
-								name: c.commit.author.name,
-								date: date
-							};
-						});
-
-					this.filter.pagination.totalPages = +data.pagination.totalPages;
-					this.filter.pagination.currentPage = +data.pagination.currentPage;
-				}
-			);
+	async patch(sha: String) {
+		this.patchSubscription = this.gitHubService
+			.getPatch(this.organizationName, this.repositoryName, sha, this.authService.getToken(Tokens.Jwt))
+			.subscribe(data => {
+				const blob = new Blob([data.body]);
+				const filename = sha + '.zip';
+				saveAs(blob, filename);
+			});
 	}
 
 	home() {
@@ -135,6 +128,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		this.repositoryDetailsSubscription.unsubscribe();
 		this.commitsSubscription.unsubscribe();
+		this.patchSubscription.unsubscribe();
 	}
 
 	logout(): void {

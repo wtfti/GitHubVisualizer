@@ -64,7 +64,7 @@
 									<clr-dg-cell>{{commit.date}}</clr-dg-cell>
 									<clr-dg-cell>{{commit.name}}</clr-dg-cell>
 									<clr-dg-cell>
-										<a target="_blank" href="https://github.com/{{organizationName}}/{{repositoryName}}/archive/{{commit.sha}}.zip">Download</a>
+										<a style="cursor: pointer;" (click)="patch(commit.sha)" >Download</a>
 									</clr-dg-cell>
 								</clr-dg-row>
 

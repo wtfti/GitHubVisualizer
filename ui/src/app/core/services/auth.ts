@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { gitHubAPIs, server } from '../../../environments/server';
+import { gitHubAPIs } from '../../../environments/server';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +10,7 @@ export class AuthService {
 	}
 
 	async login(username: String, password: String) {
-		const result = await this.http.post(`${server}/login`, {
+		const result = await this.http.post(`/login`, {
 			username: username,
 			password: password
 		}).toPromise();
@@ -19,7 +19,7 @@ export class AuthService {
 	}
 
 	async register(username: String, password: String, confirmPassword: String) {
-		const result = await this.http.post(`${server}/register`, {
+		const result = await this.http.post(`/register`, {
 			username: username,
 			password: password,
 			confirmPassword: confirmPassword
