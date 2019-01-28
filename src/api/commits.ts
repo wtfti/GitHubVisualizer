@@ -3,6 +3,7 @@ import _request from 'request';
 import { getHeaders } from './utils/helpers';
 import { rest } from './utils/constants';
 import { Express } from 'express';
+import { Cache } from './utils/cache';
 const request: any = bluebird.promisifyAll(_request);
 
 export = (app: Express, protectedRoute: any) => {
@@ -15,6 +16,11 @@ export = (app: Express, protectedRoute: any) => {
 		const parsedFromDate = `${fromDate[2]}-${fromDate[0]}-${fromDate[1]}`;
 		const parsedToDate = `${toDate[2]}-${toDate[0]}-${toDate[1]}`;
 		const token = req.query.token;
+
+		const cachedResponse = checkCache(organization, repository, fromDate, toDate, page);
+		if (cachedResponse) {
+			return res.send(cachedResponse);
+		}
 
 		const response = await request.getAsync({
 			url: `${rest}/repos/${organization}/${repository}/commits?since=${parsedFromDate}&until=${parsedToDate}&page=${page}`,
@@ -30,12 +36,28 @@ export = (app: Express, protectedRoute: any) => {
 			}
 		}
 
-		res.send({
+		const result = {
 			commits: JSON.parse(response.body),
 			pagination: {
 				totalPages: totalPages,
 				currentPage: page
 			}
-		});
+		};
+
+		addCache(organization, repository, fromDate, toDate, page, result);
+
+		res.send(result);
 	});
 };
+
+function checkCache(organization: String, repository: String, fromDate: Array<String>, toDate: Array<String>, page: String) {
+	const key = `${organization}.${repository}.${fromDate.join('.')}.${toDate.join('.')}.${page}`;
+
+	return Cache.get(key);
+}
+
+function addCache(organization: String, repository: String, fromDate: Array<String>, toDate: Array<String>, page: String, response: any) {
+	const key = `${organization}.${repository}.${fromDate.join('.')}.${toDate.join('.')}.${page}`;
+
+	Cache.push(key, response);
+}
